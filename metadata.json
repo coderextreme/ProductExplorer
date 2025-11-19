@@ -1,0 +1,5 @@
+{
+  "name": "Gemini File Explorer",
+  "description": "An application that mimics a desktop file explorer to manage various apps like product filtering, 3D asset management, a music player, and a contacts scheduler, all enhanced with Gemini AI.",
+  "requestFramePermissions": []
+}
