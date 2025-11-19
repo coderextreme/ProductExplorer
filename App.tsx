@@ -99,7 +99,13 @@ export default function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
-  const [nowPlaying, setNowPlaying] = useState<{track: Track, album: FileSystemNode} | null>(null);
+  const [nowPlaying, setNowPlaying] = useState<{track: Track, album: FileSystemNode} | null>(() => {
+    try {
+      const saved = localStorage.getItem('gemini-explorer-nowPlaying');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) { return null; }
+  });
+  
   const [isPlaying, setIsPlaying] = useState(false);
 
   const currentNode = useMemo(() => findNodeByPath(path) || ROOT_NODE, [path]);
@@ -117,6 +123,14 @@ export default function App() {
     localStorage.setItem('gemini-explorer-history', JSON.stringify(history));
     localStorage.setItem('gemini-explorer-historyIndex', historyIndex.toString());
   }, [history, historyIndex]);
+
+  useEffect(() => {
+    if (nowPlaying) {
+      localStorage.setItem('gemini-explorer-nowPlaying', JSON.stringify(nowPlaying));
+    } else {
+      localStorage.removeItem('gemini-explorer-nowPlaying');
+    }
+  }, [nowPlaying]);
 
 
   const navigateTo = useCallback((newPath: string[]) => {
